@@ -8,8 +8,8 @@ class RedBlackNode
     public:
         RedBlackColor color;
         T key;
-        RedBlackNode *left_child;
-        RedBlackNode *right_child;
+        RedBlackNode *leftChild;
+        RedBlackNode *rightChild;
         RedBlackNode *parent;
 };
 
@@ -17,15 +17,19 @@ template<class T>
 class RedBlackTree
 {
     private:
-        RedBlackNode<T> *tree_root;
+        RedBlackNode<T> *treeRoot;
 
     public:
         RedBlackTree();
         ~RedBlackTree();
 
         RedBlackNode<T> *search(T key);
+        void leftRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void rightRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node);
         void insert(T key);
         void remove(T key);
+
 };
+
 
 #endif
