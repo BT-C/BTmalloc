@@ -1,6 +1,7 @@
 #include<iostream>
 
 #include "MemoryAllocator.h"
+#include "RedBlackTree.h"
 
 
 void * MyMalloc(size_t malloc_size)
@@ -14,9 +15,15 @@ void * MyMalloc(size_t malloc_size)
     // m.InitMemoryStruct();
 }
 
+void TestRedBlack()
+{
+    int input[] = {10, 20, 30, 40, 50, 60};
+    
+}
+
 int main()
 {
-    MyMalloc(10);
+    // MyMalloc(10);
 
     return 1;
 }

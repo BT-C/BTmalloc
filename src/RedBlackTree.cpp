@@ -1,5 +1,10 @@
 #include "RedBlackTree.h"
 
+
+template<class T>
+RedBlackNode<T>::RedBlackNode(T value, RedBlackColor color, RedBlackNode* parent, RedBlackNode* left, RedBlackNode* right):
+    key(value), color(color), parent(parent), leftChild(left), rightChild(right) {}
+
 template<class T>
 void RedBlackTree<T>::leftRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node)
 {
@@ -24,7 +29,7 @@ void RedBlackTree<T>::leftRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node)
     }
 
     node -> parent = nodeRight;
-};
+}
 
 template<class T>
 void rightRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node)
@@ -50,4 +55,52 @@ void rightRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node)
     }
 
     node -> parent = nodeLeft;
-};
+}
+
+template<class T>
+void RedBlackTree<T>::insert(T key)
+{
+    RedBlackNode<T>* insertNode = NULL;
+    insertNode = new RedBlackNode<T>(key, BLACK, NULL, NULL, NULL);
+    if (insertNode == NULL)
+        return ;
+    this -> insert(treeRoot, insertNode);
+}
+
+
+template<class T>
+void RedBlackTree<T>::insert(RedBlackNode<T>* &root, RedBlackNode<T>* node)
+{
+    RedBlackNode<T>* pre  = NULL;
+    RedBlackNode<T>* next = root;
+
+    while (next != NULL)
+    {
+        pre = next;
+        if (node -> key <= next -> key)
+            next = next -> leftChild;
+        else
+            next = next -> rightChild;
+    }
+
+    node -> parent = pre;
+    if (pre == NULL)
+        root = node;
+    else
+    {
+        if (node -> key <= pre -> key)
+            pre -> leftChild = node;
+        else    
+            pre -> rightChild = node;
+    }
+        
+
+    node -> color = RED;
+    insertReBalance(root, node);
+}
+
+template<class T>
+void RedBlackTree<T>::insertReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* node)
+{
+    
+}
