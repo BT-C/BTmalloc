@@ -102,5 +102,37 @@ void RedBlackTree<T>::insert(RedBlackNode<T>* &root, RedBlackNode<T>* node)
 template<class T>
 void RedBlackTree<T>::insertReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* node)
 {
-    
+    RedBlackNode<T>* parent, * grandparent;
+
+    while ((parent = node -> parent) && parent -> color == RED)
+    {
+        grandparent = parent -> parent;
+        if (parent == grandparent -> leftChild)
+        {
+            RedBlackNode<T>* uncle = grandparent -> rightChild;
+            if (uncle && uncle -> color == RED)
+            {
+                uncle -> color = BLACK;
+                parent -> color = BLACK;
+                grandparent -> color = RED;
+                node = grandparent;
+                continue;
+            }
+
+            if (parent -> rightChild == node)
+            {
+                leftRotate(root, parent);
+                RedBlackNode<T>* tempNode = parent;
+                parent = node;
+                node = tempNode;
+            }
+            parent -> color = BLACK;
+            grandparent -> color = RED;
+            rightRotate(root, grandparent);
+        }
+        else
+        {
+
+        }
+    }
 }
