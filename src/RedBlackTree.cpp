@@ -132,7 +132,25 @@ void RedBlackTree<T>::insertReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* n
         }
         else
         {
+            RedBlackNode<T>* uncle = grandparent -> leftChild;
+            if (uncle && uncle -> color == RED){
+                uncle -> color = BLACK;
+                parent -> color = BLACK;
+                grandparent -> color = RED;
+                node = grandparent;
+                continue;
+            }
 
+            if (parent -> leftChild == node)
+            {
+                rightRotate(parent);
+                RedBlackNode<T>* tempParent = parent;
+                parent = node;
+                node = tempParent;
+            }
+            parent -> color = BLACK;
+            grandparent -> color = RED;
+            leftRotate(root, grandparent);
         }
     }
 }
