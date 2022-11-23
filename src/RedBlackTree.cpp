@@ -169,6 +169,8 @@ template<class T>
 void RedBlackTree<T>::remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
 {
     RedBlackNode<T>* child, * parent;
+    RedBlackColor color;
+
     if ((node -> leftChild != NULL) && (node -> rightChild != NULL))
     {
         RedBlackNode<T>* replace = node;
@@ -183,7 +185,33 @@ void RedBlackTree<T>::remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
             else    
                 node -> parent -> rightChild = replace;
         }
+        else
+            root = replace;
+
+        child = replace -> rightChild;
+        parent = replace -> parent;
+        color = replace -> color;
+
+        if (parent == node)
+            parent = replace;
+        else
+        {
+            if (child)
+                child -> parent = parent;
+            parent -> left= child;
+
+            replace -> rightChild = node -> rightChild;
+            node -> rightChild -> parent = replace;
+        }
+
+        replace -> parent = node -> parent;
+        replace -> color = node -> color;
+        replace -> leftChild = node -> leftChild;
+        if (color == BLACK)
+            removeReBalance(root, child, parent);
         
+        delete node;
+        return ;
     }
 
     if (node -> leftChild != NULL)
@@ -192,7 +220,7 @@ void RedBlackTree<T>::remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
         child = node -> rightChild;
     
     parent = node -> parent;
-    RedBlackColor color = node -> color;
+    color = node -> color;
 
     if (child)
         child -> parent = parent;
@@ -209,5 +237,6 @@ void RedBlackTree<T>::remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
     
     if (color == BLACK)
         removeReBalance(root, child, parent);
-
+    
+    delete node;
 }
