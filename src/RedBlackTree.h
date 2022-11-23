@@ -32,6 +32,8 @@ class RedBlackTree
         void insert(T key);
         void insertReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* node);
         void remove(T key);
+        void remove(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void removeReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* childNode, RedBlackNode<T>* parentNode);
 };
 
 

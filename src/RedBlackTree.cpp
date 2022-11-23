@@ -153,4 +153,61 @@ void RedBlackTree<T>::insertReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* n
             leftRotate(root, grandparent);
         }
     }
+
+    root -> color = BLACK;
+}
+
+template<class T>
+void RedBlackTree<T>::remove(T key)
+{
+    RedBlackNode<T> *removeNode = NULL;
+    if ((removeNode == search(key)) != NULL)
+        remove(treeRoot, removeNode);
+}
+
+template<class T>
+void RedBlackTree<T>::remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
+{
+    RedBlackNode<T>* child, * parent;
+    if ((node -> leftChild != NULL) && (node -> rightChild != NULL))
+    {
+        RedBlackNode<T>* replace = node;
+        replace = replace -> rightChild;
+        while (replace -> leftChild)
+            replace = replace -> leftChild;
+
+        if (node -> parent != root)
+        {
+            if (node -> parent -> leftChild == node)
+                node -> parent -> leftChild = replace;
+            else    
+                node -> parent -> rightChild = replace;
+        }
+        
+    }
+
+    if (node -> leftChild != NULL)
+        child = node -> leftChild;
+    else
+        child = node -> rightChild;
+    
+    parent = node -> parent;
+    RedBlackColor color = node -> color;
+
+    if (child)
+        child -> parent = parent;
+    
+    if (parent)
+    {
+        if (parent -> leftChild == node)
+            parent -> leftChild = child;
+        else
+            parent -> rightChild = child;
+    }
+    else    
+        root = child;
+    
+    if (color == BLACK)
+        removeReBalance(root, child, parent);
+
 }
