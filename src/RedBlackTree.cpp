@@ -240,3 +240,26 @@ void RedBlackTree<T>::remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
     
     delete node;
 }
+
+template<class T>
+void RedBlackTree<T>::removeReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* node, RedBlackNode<T>* parentNode)
+{
+    RedBlackNode<T>* uncle = NULL;
+    while ((!node || node -> color == BLACK && node != root))
+    {
+        if (parentNode -> left == node)
+        {
+            uncle = parent -> right;
+            if (uncle -> color == RED)
+            {
+
+            }
+
+            
+        }
+        else
+        {
+
+        }
+    }
+}
