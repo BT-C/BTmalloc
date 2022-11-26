@@ -259,29 +259,69 @@ void RedBlackTree<T>::removeReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* n
             }
 
             if (
-                (!uncle -> leftChild || uncle -> leftChild == BLACK) &&
-                (!uncle -> rightChild || uncle -> rightChild == BLACK))
+                (!uncle -> leftChild || uncle -> leftChild -> color == BLACK) &&
+                (!uncle -> rightChild || uncle -> rightChild -> color == BLACK))
             {
                 uncle -> color = RED;
-                node = parent;
+                node = parentNode;
                 parentNode = node -> parent;
             }
             else
             {
-                if (!uncle -> rightChild || uncle -> rightChild == BLACK)
+                if (!uncle -> rightChild || uncle -> rightChild -> color == BLACK)
                 {
-                    uncle -> leftChild = BLACK;
+                    uncle -> leftChild -> color = BLACK;
                     uncle -> color = RED;
                     rightRotate(root, uncle);
                     uncle = parentNode -> rightChild;
                 }
 
-                uncle -> 
+                uncle -> color = parentNode -> color;
+                parentNode -> color = BLACK;
+                uncle -> rightChild -> color = BLACK;
+                leftRotate(root, parentNode);
+                node = root;
+                break;
             }
         }
         else
         {
+            uncle = parentNode -> leftChild;
+            if (uncle -> color == RED)
+            {
+                uncle -> color = BLACK;
+                parentNode -> color = RED;
+                rightRotate(root, parentNode);
+                uncle = parentNode -> left;
+            }
 
+            if ((!node -> leftChild || node -> leftChild -> color == BLACK) && 
+                (!node -> rightChild || node -> rightChild -> color == BLACK))
+            {
+                uncle -> color = RED;
+                node = parentNode;
+                parentNode = node -> parent;
+            }
+            else
+            {
+                if (!uncle -> leftChild || uncle -> leftChild == BLACK)
+                {
+                    uncle -> rightChild -> color = BLACK;
+                    uncle -> color = RED;
+                    leftRotate(root, uncle);
+                    uncle = parentNode -> leftChild;
+                }
+
+                uncle -> color = parentNode -> color;
+                parentNode -> color = BLACK;
+                uncle -> leftChild = BLACK;
+                rightRotate(root, parentNode);
+                node = root;
+                break;
+            }
         }
     }
+
+    if (node)
+        node -> color = BLACK;
 }
