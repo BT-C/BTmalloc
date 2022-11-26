@@ -252,10 +252,32 @@ void RedBlackTree<T>::removeReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* n
             uncle = parent -> right;
             if (uncle -> color == RED)
             {
-
+                uncle -> color = BLACK;
+                parentNode -> color = RED;
+                leftRotate(root, parentNode);
+                uncle = parentNode -> rightChild;
             }
 
-            
+            if (
+                (!uncle -> leftChild || uncle -> leftChild == BLACK) &&
+                (!uncle -> rightChild || uncle -> rightChild == BLACK))
+            {
+                uncle -> color = RED;
+                node = parent;
+                parentNode = node -> parent;
+            }
+            else
+            {
+                if (!uncle -> rightChild || uncle -> rightChild == BLACK)
+                {
+                    uncle -> leftChild = BLACK;
+                    uncle -> color = RED;
+                    rightRotate(root, uncle);
+                    uncle = parentNode -> rightChild;
+                }
+
+                uncle -> 
+            }
         }
         else
         {
