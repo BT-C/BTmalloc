@@ -218,7 +218,7 @@ class RedBlackTree
         void remove(T key)
         {
             RedBlackNode<T> *removeNode = NULL;
-            if ((removeNode == search(key)) != NULL)
+            if ((removeNode = search(key)) != NULL)
                 remove(treeRoot, removeNode);
         }
 
@@ -501,3 +501,4 @@ class RedBlackTree
 };
 
 #endif
+ 

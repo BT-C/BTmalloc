@@ -1,7 +1,7 @@
 #include<iostream>
 #include <iomanip>
 
-// #include "MemoryAllocator.h"
+#include "MemoryAllocator.h"
 #include "RedBlackTree.h"
 
 
@@ -82,6 +82,42 @@ void TestRedBlack()
 int main()
 {
     // MyMalloc(10);
-    TestRedBlack();
+    // TestRedBlack();
+    
+    MetaMemory m(10, 20);
+    // std::cout << m.getAddress() << " " << m.getMemorySize() << std::endl;   
+    MetaMemory metaList[10];
+    std::cout << sizeof(metaList) / sizeof(metaList[0]) << std::endl;
+    int length = sizeof(metaList) / sizeof(metaList[0]);
+    for (int i = 0; i < length; i ++)
+    {
+        metaList[i].memorySize = i * 10;
+    }
+
+    RedBlackTree<MetaMemory> *tree = new RedBlackTree<MetaMemory>();
+    for (int i = 0; i < length; i ++)
+    {
+        // for (int j = 0; j < 3; j ++)
+        tree -> insert(MetaMemory(i * 20, 0));
+    }
+
+    for (int i = 0; i < length; i ++)
+    {
+        // std::cout << metaList[i].memorySize << std::endl;
+        std::cout << "------------" << std::endl;
+        for (int j = 0; j < 2; j ++)
+        {
+            RedBlackNode<MetaMemory> *result = tree -> search(metaList[i]);
+            if (result)
+            {
+                // std::cout << (result -> key.getMemorySize()) << std::endl;
+                tree -> remove(metaList[i]);
+                tree -> preOrder();
+                std::cout << "----" << std::endl;
+            }
+            else
+                std::cout << "NULL" << std::endl;
+        }
+    }
     return 1;
 }
