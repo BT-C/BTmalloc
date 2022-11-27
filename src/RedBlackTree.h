@@ -71,11 +71,11 @@ class RedBlackTree
 
         void leftRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node)
         {
-            RedBlackNode<T>* nodeLeft   = node -> leftChild;
-            RedBlackNode<T>* nodeRight  = node -> rightChild;
-            RedBlackNode<T>* parent    = node -> parent;
+            RedBlackNode<T>* nodeLeft = node -> leftChild;
+            RedBlackNode<T>* nodeRight = node -> rightChild;
+            RedBlackNode<T>* parent = node -> parent;
 
-            node -> rightChild     = nodeRight -> leftChild;
+            node -> rightChild = nodeRight -> leftChild;
             if (nodeRight -> leftChild)
                 nodeRight -> leftChild -> parent = node;
             nodeRight -> parent    = parent;
@@ -93,6 +93,7 @@ class RedBlackTree
 
             node -> parent = nodeRight;
         }
+
         void rightRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node)
         {
             RedBlackNode<T>* nodeLeft  = node -> leftChild;
@@ -106,7 +107,8 @@ class RedBlackTree
             nodeLeft -> rightChild = node;
 
             if (node -> parent == NULL)
-                node -> parent = root;
+                // node -> parent = root;
+                root = nodeLeft;
             else
             {
                 if (parent -> leftChild == node)

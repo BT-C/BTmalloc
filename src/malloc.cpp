@@ -97,15 +97,20 @@ int main()
     RedBlackTree<MetaMemory> *tree = new RedBlackTree<MetaMemory>();
     for (int i = 0; i < length; i ++)
     {
-        // for (int j = 0; j < 3; j ++)
-        tree -> insert(MetaMemory(i * 20, 0));
+        for (int j = 0; j < 4; j ++)
+        {
+            tree -> insert(MetaMemory(i * 20, 0));
+            tree -> preOrder();
+            std::cout << std::endl;
+        }
+        std::cout << "------" << std::endl;
     }
 
     for (int i = 0; i < length; i ++)
     {
         // std::cout << metaList[i].memorySize << std::endl;
         std::cout << "------------" << std::endl;
-        for (int j = 0; j < 2; j ++)
+        for (int j = 0; j < 4; j ++)
         {
             RedBlackNode<MetaMemory> *result = tree -> search(metaList[i]);
             if (result)
