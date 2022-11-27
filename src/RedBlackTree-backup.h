@@ -1,4 +1,65 @@
-#include "RedBlackTree.h"
+#ifndef REDBLACKTREE
+#define REDBLACKTREE
+enum RedBlackColor{RED, BLACK};
+
+template<class T>
+class RedBlackNode
+{
+    public:
+        RedBlackColor color;
+        T key;
+        RedBlackNode *leftChild;
+        RedBlackNode *rightChild;
+        RedBlackNode *parent;
+
+        RedBlackNode(T value, RedBlackColor color, RedBlackNode* parent, RedBlackNode* left, RedBlackNode* right);
+};
+
+template<class T>
+class RedBlackTree
+{
+    private:
+        RedBlackNode<T> *treeRoot;
+
+        void preOrder(RedBlackNode<T>* tree);
+        void inOrder(RedBlackNode<T>* tree);
+        void postOrder(RedBlackNode<T>* tree);
+        void print(RedBlackNode<T>* tree, T key, int direction);
+
+    public:
+        RedBlackTree();
+        ~RedBlackTree();
+
+        RedBlackNode<T> *search(T key);
+        
+        void destroy();
+        void destroy(RedBlackNode<T>* &tree);
+        
+
+        void print();
+        
+        
+        void preOrder();
+        void inOrder();
+        void postOrder();
+        
+
+        RedBlackNode<T>* minimum(RedBlackNode<T>* tree);
+        RedBlackNode<T>* maximum(RedBlackNode<T>* tree);
+        T maximum();
+        T minimum();
+
+        void leftRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void rightRotate(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void insert(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void insert(T key);
+        void insertReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void remove(T key);
+        void remove(RedBlackNode<T>* &root, RedBlackNode<T>* node);
+        void removeReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* childNode, RedBlackNode<T>* parentNode);
+};
+
+
 #include<iostream>
 #include <iomanip>
 
@@ -486,71 +547,10 @@ T RedBlackTree<T>::maximum()
 }
 
 
+// int main()
+// {
+//     TestRedBlack();
+//     return 0;
+// }
 
-void TestRedBlack()
-{
-    int a[]= {10, 40, 30, 60, 90, 70, 20, 50, 80};
-    int check_insert=0;    // "插入"动作的检测开关(0，关闭；1，打开)
-    int check_remove=0;    // "删除"动作的检测开关(0，关闭；1，打开)
-    int i;
-    int ilen = (sizeof(a)) / (sizeof(a[0])) ;
-    RedBlackTree<int>* tree=new RedBlackTree<int>();
-    
-    std::cout << "== 原始数据: ";
-    for(i=0; i<ilen; i++)
-        std::cout << a[i] <<" ";
-    std::cout << std::endl;
-
-    for(i=0; i<ilen; i++)
-    {
-        tree->insert(a[i]);
-        // 设置check_insert=1,测试"添加函数"
-        if(check_insert)
-        {
-            std::cout << "== 添加节点: " << a[i] << std::endl;
-            std::cout << "== 树的详细信息: " << std::endl;
-            tree->print();
-            std::cout << std::endl;
-        }
-
-    }
-
-    std::cout << "== 前序遍历: ";
-    tree->preOrder();
-
-    std::cout << "\n== 中序遍历: ";
-    tree->inOrder();
-
-    std::cout << "\n== 后序遍历: ";
-    tree->postOrder();
-    std::cout << std::endl;
-
-    std::cout << "== 最小值: " << tree->minimum() << std::endl;
-    std::cout << "== 最大值: " << tree->maximum() << std::endl;
-    std::cout << "== 树的详细信息: " << std::endl;
-    tree->print();
-
-    // 设置check_remove=1,测试"删除函数"
-    if(check_remove)
-    {
-        for(i=0; i<ilen; i++)
-        {
-            tree->remove(a[i]);
-
-            std::cout << "== 删除节点: " << a[i] << std::endl;
-            std::cout << "== 树的详细信息: " << std::endl;
-            tree->print();
-            std::cout << std::endl;
-        }
-    }
-
-    // 销毁红黑树
-    tree -> destroy();
-
-}
-
-int main()
-{
-    TestRedBlack();
-    return 0;
-}
+#endif
