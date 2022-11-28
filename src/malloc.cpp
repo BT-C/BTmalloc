@@ -1,6 +1,7 @@
 #include<iostream>
 #include <iomanip>
 
+#include "Memory.h"
 #include "MemoryAllocator.h"
 #include "RedBlackTree.h"
 
@@ -79,7 +80,7 @@ void TestRedBlack()
 
 }
 
-int main()
+void TestRedBlackAllocate()
 {
     // MyMalloc(10);
     // TestRedBlack();
@@ -126,5 +127,20 @@ int main()
 
         // return 0;
     }
+    // return 1;
+}
+
+void *MyMalloc()
+{
+    MemoryAllocator& mallocator = MemoryAllocator::get_instance();
+    return (void *)1;
+}
+
+int main()
+{
+    
+    void* address = MyMalloc();
+    std::cout << sizeof(address) << std::endl;
+
     return 1;
 }

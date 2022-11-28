@@ -5,7 +5,22 @@
 
 MemoryAllocator::MemoryAllocator()
 {
-    std::cout << "create function" << std::endl;
+    std::cout << "create memory allocator" << std::endl;
+    size_t row = 10, col = 2;
+    size_t scopeInterval = 1024;
+    size_t lowerBound = 0, upperBound = 0;
+
+    // int scopeList[row][col];
+    for (int i = 0; i < row; i ++)
+    {
+        // scopeList[i][0] = i * scopeInterval;
+        // scopeList[i][1] = (i + 1) * scopeInterval;
+        lowerBound = i * scopeInterval;
+        upperBound = (i + 1) * scopeInterval;
+        this -> scopeTree -> insert(ScopeMemory(lowerBound, upperBound));
+    }
+
+    this -> scopeTree -> preOrder();
 }
 
 MemoryAllocator& MemoryAllocator::get_instance()
@@ -16,52 +31,6 @@ MemoryAllocator& MemoryAllocator::get_instance()
 
 MemoryAllocator::~MemoryAllocator()
 {
+    scopeTree -> destroy();
     std::cout << "delete MemoryAllocator" << std::endl;
-}
-
-MetaMemory::MetaMemory(){
-    this -> memorySize = 0;
-    this -> address = 0;
-}
-
-MetaMemory::MetaMemory(size_t memory, size_t address)
-{
-    this -> memorySize = memory;
-    this -> address = address;
-}
-
-size_t MetaMemory::getAddress()
-{
-    return this -> address;
-}
-
-size_t MetaMemory::getMemorySize()
-{
-    return this -> memorySize;
-}
-
-bool MetaMemory::operator<(MetaMemory &a)
-{
-    return this -> memorySize < a.memorySize;
-}
-
-bool MetaMemory::operator>(MetaMemory &a)
-{
-    return this -> memorySize > a.memorySize;
-}
-
-bool MetaMemory::operator==(MetaMemory &a)
-{
-    return this -> memorySize == a.memorySize;
-}
-
-bool MetaMemory::operator<=(MetaMemory &a)
-{
-    return this -> memorySize <= a.memorySize;
-}
-
-std::ostream & operator << (std::ostream &os, MetaMemory &a)
-{
-    os << a.memorySize;
-    return os;
 }

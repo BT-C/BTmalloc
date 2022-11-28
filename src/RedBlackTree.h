@@ -1,5 +1,7 @@
 #ifndef REDBLACKTREE
 #define REDBLACKTREE
+
+#include <iomanip>
 enum RedBlackColor{RED, BLACK};
 
 template<class T>
@@ -33,6 +35,10 @@ class RedBlackTree
             destroy();
         }
 
+        RedBlackNode<T>* getRoot()
+        {
+            return this -> treeRoot;
+        }
                 
         RedBlackNode<T>* search(RedBlackNode<T>* x, T key) 
         {
