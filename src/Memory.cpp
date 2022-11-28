@@ -4,6 +4,7 @@
 #include<iostream>
 #include<cstdlib>
 #include<ctime>
+#include<mutex>
 
 
 MetaMemory::MetaMemory(){
@@ -68,7 +69,8 @@ ScopeMemory::ScopeMemory()
     this -> lowerBound = 0;
     this -> upperBound = 0;
     this -> treeListLength = 10;
-    this -> memoryAllocator = NULL;
+    // this -> memoryAllocator = NULL;
+    this -> mutexList = new std::mutex[this -> treeListLength];
     this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
 }
 
@@ -77,18 +79,19 @@ ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound)
     this -> lowerBound = lowerBound;
     this -> upperBound = upperBound;
     this -> treeListLength = 10;
-    this -> memoryAllocator = NULL;
+    // this -> memoryAllocator = NULL;
+    this -> mutexList = new std::mutex[this -> treeListLength];
     this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
 }
 
-ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound, MemoryAllocator* memoryAllocator)
-{
-    this -> lowerBound = lowerBound;
-    this -> upperBound = upperBound;
-    this -> treeListLength = 10;
-    this -> memoryAllocator = memoryAllocator;
-    this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
-}
+// ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound, MemoryAllocator* memoryAllocator)
+// {
+//     this -> lowerBound = lowerBound;
+//     this -> upperBound = upperBound;
+//     this -> treeListLength = 10;
+//     this -> memoryAllocator = memoryAllocator;
+//     this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
+// }
 
 void ScopeMemory::insertMemory(MetaMemory* node)
 {
@@ -101,11 +104,14 @@ void ScopeMemory::insertMemory(MetaMemory* node)
 void* ScopeMemory::allocate(size_t memorySize)
 {
     size_t index = rand() % (this -> treeListLength);
+
+    this -> mutexList[index].lock();
     RedBlackNode<MetaMemory>* result = this -> treeList[index].search(MetaMemory(memorySize, 0));
     if (result)
     {
         void *address = (void *)(result -> key.getAddress());
         treeList[index].remove(MetaMemory(memorySize, 0));
+        this -> mutexList[index].unlock();
         return address;
     }
     else
@@ -120,8 +126,10 @@ void* ScopeMemory::allocate(size_t memorySize)
         // this -> memoryAllocator
         size_t memorySize = memorySize;
         size_t address = 0;
-        MetaMemory *memory = new MetaMemory(memorySize, address);
-        return memory;
+        // MetaMemory *memory = new MetaMemory(memorySize, address);
+        // return memory;
+        this -> mutexList[index].unlock();
+        return (void *)address;
     }
 }
 

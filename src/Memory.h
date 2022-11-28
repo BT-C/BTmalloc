@@ -1,8 +1,9 @@
 #ifndef MEMORY
 #define MEMORY
-#include<iostream>
+#include <iostream>
 #include <stddef.h>
 #include <cstdlib>
+#include <mutex>
 
 #include "RedBlackTree.h"
 
@@ -32,12 +33,14 @@ class ScopeMemory
         size_t lowerBound;
         size_t upperBound;
         size_t treeListLength;
+        std::mutex *mutexList;
         RedBlackTree<MetaMemory>* treeList;
-        MemoryAllocator* memoryAllocator;
+        
+        // MemoryAllocator* memoryAllocator;
 
         ScopeMemory();
         ScopeMemory(size_t lowerBound, size_t upperBound);
-        ScopeMemory(size_t lowerBound, size_t upperBound, MemoryAllocator* memoryAllocator);
+        // ScopeMemory(size_t lowerBound, size_t upperBound, MemoryAllocator* memoryAllocator);
         ~ScopeMemory();
 
         void insertMemory(MetaMemory* node);
