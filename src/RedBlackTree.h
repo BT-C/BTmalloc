@@ -53,7 +53,7 @@ class RedBlackTree
         
         RedBlackNode<T>* search(T key) 
         {
-            search(treeRoot, key);
+            return search(treeRoot, key);
         }
         
         void destroy()

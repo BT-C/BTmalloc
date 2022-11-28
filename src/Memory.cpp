@@ -1,6 +1,8 @@
 #include "Memory.h"
 
 #include<iostream>
+#include<cstdlib>
+#include<ctime>
 
 
 MetaMemory::MetaMemory(){
@@ -64,19 +66,29 @@ ScopeMemory::ScopeMemory()
 {
     this -> lowerBound = 0;
     this -> upperBound = 0;
-    this -> tree = new RedBlackTree<MetaMemory>();
+    this -> treeListLength = 10;
+    this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
 }
 
 ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound)
 {
     this -> lowerBound = lowerBound;
     this -> upperBound = upperBound;
-    this -> tree = new RedBlackTree<MetaMemory>();
+    this -> treeListLength = 10;
+    this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
+}
+
+bool ScopeMemory::insertMemory(MetaMemory* node)
+{
+    srand((int)time(0));
+    size_t index = rand() % this -> treeListLength;
+    
 }
 
 ScopeMemory::~ScopeMemory()
 {
-    tree -> destroy();
+    for (int i = 0; i < this -> treeListLength; i ++)
+        this -> treeList[i].destroy();
 }
 
 // void ScopeMemory::modifyBound()

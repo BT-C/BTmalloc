@@ -1,5 +1,7 @@
 #include<iostream>
 #include <iomanip>
+#include<cstdlib>
+#include<ctime>
 
 #include "Memory.h"
 #include "MemoryAllocator.h"
@@ -139,8 +141,7 @@ void *MyMalloc()
 int main()
 {
     
-    void* address = MyMalloc();
-    std::cout << sizeof(address) << std::endl;
-
-    return 1;
+    // void* address = MyMalloc();
+    // std::cout << sizeof(address) << std::endl;
+    
 }

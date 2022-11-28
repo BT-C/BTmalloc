@@ -12,6 +12,7 @@ class MemoryAllocator
     private:
         RedBlackTree<ScopeMemory>* scopeTree;
         MemoryAllocator();
+        void insertMemory(MetaMemory m);
     public:
         ~MemoryAllocator();
         MemoryAllocator(const MemoryAllocator&)=delete;

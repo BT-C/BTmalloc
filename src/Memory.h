@@ -31,10 +31,14 @@ class ScopeMemory
     public:
         size_t lowerBound;
         size_t upperBound;
-        RedBlackTree<MetaMemory>* tree;
+        size_t treeListLength;
+        RedBlackTree<MetaMemory>* treeList;
+
         ScopeMemory();
         ScopeMemory(size_t lowerBound, size_t upperBound);
         ~ScopeMemory();
+
+        bool insertMemory(MetaMemory* node);
 
         // void modifyBound();
         bool operator < (ScopeMemory& a);
