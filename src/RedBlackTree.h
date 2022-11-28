@@ -221,7 +221,9 @@ class RedBlackTree
         {
             RedBlackNode<T> *removeNode = NULL;
             if ((removeNode = search(key)) != NULL)
+            {
                 remove(treeRoot, removeNode);
+            }
         }
 
         void remove(RedBlackNode<T>* &root, RedBlackNode<T>* node)
@@ -231,12 +233,14 @@ class RedBlackTree
 
             if ((node -> leftChild != NULL) && (node -> rightChild != NULL))
             {
+                // std::cout << "#######" << std::endl;
+                // std::cout << node -> parent << std::endl;
                 RedBlackNode<T>* replace = node;
                 replace = replace -> rightChild;
                 while (replace -> leftChild)
                     replace = replace -> leftChild;
 
-                if (node -> parent != root)
+                if (node -> parent)
                 {
                     if (node -> parent -> leftChild == node)
                         node -> parent -> leftChild = replace;
@@ -262,37 +266,90 @@ class RedBlackTree
                     node -> rightChild -> parent = replace;
                 }
 
+                // std::cout << "replace : " << replace -> key << std::endl;
                 replace -> parent = node -> parent;
                 replace -> color = node -> color;
                 replace -> leftChild = node -> leftChild;
+                node -> leftChild -> parent = replace;
+                // std::cout << node -> leftChild -> key << std::endl;
+
+                // std::cout << "====" << std::endl;
+                // preOrder();
+                // std::cout << "====" << std::endl;
+                // std::cout << root -> key << std::endl;
+                // std::cout << child << std::endl;
+                // std::cout << parent -> key << std::endl;
                 if (color == BLACK)
                     removeReBalance(root, child, parent);
-                
                 delete node;
+                // preOrder();
+                // std::cout << "#######" << std::endl;
+                
                 return ;
             }
 
+
+            // std::cout << (node -> leftChild) << std::endl;
+            // std::cout << (node -> rightChild) << std::endl;
+            
+            child = NULL;
             if (node -> leftChild != NULL)
                 child = node -> leftChild;
             else
                 child = node -> rightChild;
             
             parent = node -> parent;
+            // std::cout << node -> key << std::endl;
+            // std::cout << " &&&& " << std::endl;
+            // std::cout << treeRoot -> key << std::endl;
+            // std::cout << treeRoot -> leftChild -> key << std::endl;
+            // std::cout << treeRoot -> rightChild -> key << std::endl;
+            // std::cout << treeRoot -> leftChild -> parent -> key << std::endl;
+            // std::cout << treeRoot -> rightChild -> parent -> key << std::endl;
+            // std::cout << parent -> key << std::endl;
+            // std::cout << parent -> leftChild -> key << std::endl;
+            // std::cout << parent -> rightChild -> key<< std::endl;
             color = node -> color;
 
             if (child)
                 child -> parent = parent;
             
+
+            // std::cout << parent -> leftChild << std::endl;
+            // std::cout << parent -> rightChild << std::endl;
+            // std::cout << child << std::endl;
+
+            // std::cout << "+++" << std::endl;
             if (parent)
             {
                 if (parent -> leftChild == node)
+                {
                     parent -> leftChild = child;
+                }
                 else
+                {
                     parent -> rightChild = child;
+                }
             }
             else    
                 root = child;
+            // std::cout << "+++" << std::endl;
+            // std::cout << parent -> key << std::endl;
             
+
+            // parent -> leftChild = NULL;
+            // parent -> rightChild = NULL;
+            // std::cout << parent -> leftChild << std::endl;
+            // std::cout << parent -> rightChild << std::endl;
+            // std::cout << child << std::endl;
+
+            
+            // std::cout << "====" << std::endl;
+            // preOrder();
+            // std::cout << "====" << std::endl;
+            // std::cout << root -> key << std::endl;
+            // std::cout << child -> key << std::endl;
+            // std::cout << parent -> key << std::endl;
             if (color == BLACK)
                 removeReBalance(root, child, parent);
             
@@ -302,8 +359,9 @@ class RedBlackTree
         void removeReBalance(RedBlackNode<T>* &root, RedBlackNode<T>* node, RedBlackNode<T>* parentNode)
         {
             RedBlackNode<T>* uncle = NULL;
-            while ((!node || node -> color == BLACK && node != root))
+            while ((!node || node -> color == BLACK) && node != root)
             {
+                
                 if (parentNode -> leftChild == node)
                 {
                     uncle = parentNode -> rightChild;
@@ -343,6 +401,7 @@ class RedBlackTree
                 }
                 else
                 {
+                    // std::cout << "node -> parent " << std::endl;
                     uncle = parentNode -> leftChild;
                     if (uncle -> color == RED)
                     {
@@ -352,8 +411,9 @@ class RedBlackTree
                         uncle = parentNode -> leftChild;
                     }
 
-                    if ((!node -> leftChild || node -> leftChild -> color == BLACK) && 
-                        (!node -> rightChild || node -> rightChild -> color == BLACK))
+                    // std::cout << "node -> parent " << std::endl;
+                    if ((!uncle -> leftChild || uncle -> leftChild -> color == BLACK) && 
+                        (!uncle -> rightChild || uncle -> rightChild -> color == BLACK))
                     {
                         uncle -> color = RED;
                         node = parentNode;
@@ -369,6 +429,7 @@ class RedBlackTree
                             uncle = parentNode -> leftChild;
                         }
 
+                        
                         uncle -> color = parentNode -> color;
                         parentNode -> color = BLACK;
                         uncle -> leftChild -> color = BLACK;
@@ -410,6 +471,8 @@ class RedBlackTree
             if(tree != NULL)
             {
                 std::cout<< tree->key << " " ;
+                // if (tree -> parent)
+                //     std::cout << "(" << tree->parent->key << ") ";
                 preOrder(tree->leftChild);
                 preOrder(tree->rightChild);
             }

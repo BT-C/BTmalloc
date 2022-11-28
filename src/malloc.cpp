@@ -110,7 +110,7 @@ int main()
     {
         // std::cout << metaList[i].memorySize << std::endl;
         std::cout << "------------" << std::endl;
-        for (int j = 0; j < 4; j ++)
+        for (int j = 0; j < 6; j ++)
         {
             RedBlackNode<MetaMemory> *result = tree -> search(metaList[i]);
             if (result)
@@ -123,6 +123,8 @@ int main()
             else
                 std::cout << "NULL" << std::endl;
         }
+
+        // return 0;
     }
     return 1;
 }
