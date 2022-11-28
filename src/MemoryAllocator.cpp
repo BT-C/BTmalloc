@@ -9,6 +9,7 @@ MemoryAllocator::MemoryAllocator()
     this -> scopeTree = new RedBlackTree<ScopeMemory>();
     size_t row = 4, col = 2;
     size_t scopeInterval = 1024 * 1024;
+    this -> scopeInterval = scopeInterval;
     size_t lowerBound = 0, upperBound = 0;
 
     // int scopeList[row][col];
@@ -22,6 +23,33 @@ MemoryAllocator::MemoryAllocator()
     }
 
     this -> scopeTree -> preOrder();
+    std::cout << std::endl;
+    this -> initMemoryToTree();
+    this -> showTree();
+}
+
+void MemoryAllocator::show(RedBlackNode<ScopeMemory>* node)
+{
+    if (node == NULL)
+        return ;
+    std::cout << node -> key << std::endl;
+    node -> key.showTree();
+    show(node -> leftChild);
+    show(node -> rightChild);
+}
+
+void MemoryAllocator::showTree()
+{
+    this -> show(this -> scopeTree -> getRoot());
+}
+
+void MemoryAllocator::initMemoryToTree()
+{
+    size_t memNum = 400;
+    for (size_t i = 1; i < memNum; i ++)
+    {
+        this -> insertMemory(MetaMemory(i * 16 * 1024, i));
+    }
 }
 
 void MemoryAllocator::insertMemory(MetaMemory metaMemory)
@@ -30,11 +58,18 @@ void MemoryAllocator::insertMemory(MetaMemory metaMemory)
     RedBlackNode<ScopeMemory>* findedNode = this -> scopeTree -> search(scopeMemory);
     if (findedNode)
     {
-        // findedNode -> key.insertMemory(&metaMemory);
+        findedNode -> key.insertMemory(&metaMemory);
     }
     else
     {
-
+        // ScopeMemory maxScopeMemory = this -> scopeTree -> maximum();
+        // size_t maxScopeMemoryUpperBound = maxScopeMemory.upperBound;
+        size_t insertMemorySize = metaMemory.getMemorySize();
+        size_t insertScopeMemoryUpperBound = (size_t(insertMemorySize / this -> scopeInterval) + 1) * this -> scopeInterval;  
+        size_t insertScopeMemoryLowerBound = (size_t(insertMemorySize / this -> scopeInterval)) * this -> scopeInterval;
+        this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound));
+        findedNode = this -> scopeTree -> search(scopeMemory);
+        findedNode -> key.insertMemory(&metaMemory);
     }
 }
 

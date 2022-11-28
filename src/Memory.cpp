@@ -10,9 +10,9 @@ MetaMemory::MetaMemory(){
     this -> address = 0;
 }
 
-MetaMemory::MetaMemory(size_t memory, size_t address)
+MetaMemory::MetaMemory(size_t memorySize, size_t address)
 {
-    this -> memorySize = memory;
+    this -> memorySize = memorySize;
     this -> address = address;
 }
 
@@ -78,17 +78,29 @@ ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound)
     this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
 }
 
-bool ScopeMemory::insertMemory(MetaMemory* node)
+void ScopeMemory::insertMemory(MetaMemory* node)
 {
-    srand((int)time(0));
-    size_t index = rand() % this -> treeListLength;
-    
+    // srand((int)time(0));
+    size_t index = rand() % (this -> treeListLength);
+    // std::cout << "index :" << index << std::endl;
+    this -> treeList[index].insert((*node));
 }
 
 ScopeMemory::~ScopeMemory()
 {
     for (int i = 0; i < this -> treeListLength; i ++)
         this -> treeList[i].destroy();
+}
+
+void ScopeMemory::showTree()
+{
+    for (size_t i = 0; i < this -> treeListLength; i ++)
+    {
+        std::cout << i << " --- ";
+        this -> treeList[i].preOrder();
+        std::cout << std::endl;
+    }
+    
 }
 
 // void ScopeMemory::modifyBound()
@@ -125,5 +137,12 @@ bool ScopeMemory::operator <= (ScopeMemory& a)
 std::ostream & operator << (std::ostream &os, ScopeMemory &a)
 {
     os << "(" << a.lowerBound << ", " << a.upperBound << ")";
+    // std::cout << std::endl;
+    // for (size_t i = 0; i < a.treeListLength; i ++)
+    // {
+    //     a.treeList[i].preOrder();
+    //     std::cout << std::endl;
+    // }
     return os;
 }
+

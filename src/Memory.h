@@ -16,7 +16,7 @@ class MetaMemory
         size_t memorySize;
         size_t address;
         MetaMemory();
-        MetaMemory(size_t memory, size_t address);
+        MetaMemory(size_t memorySize, size_t address);
         size_t getMemorySize();
         size_t getAddress();
         bool operator < (MetaMemory& a);
@@ -38,9 +38,10 @@ class ScopeMemory
         ScopeMemory(size_t lowerBound, size_t upperBound);
         ~ScopeMemory();
 
-        bool insertMemory(MetaMemory* node);
+        void insertMemory(MetaMemory* node);
 
         // void modifyBound();
+        void showTree();
         bool operator < (ScopeMemory& a);
         bool operator > (ScopeMemory& a);
         bool operator == (ScopeMemory& a);

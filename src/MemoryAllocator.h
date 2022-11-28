@@ -10,14 +10,19 @@
 class MemoryAllocator
 {
     private:
+        size_t scopeInterval;
         RedBlackTree<ScopeMemory>* scopeTree;
         MemoryAllocator();
         void insertMemory(MetaMemory m);
+        void initMemoryToTree();
     public:
         ~MemoryAllocator();
         MemoryAllocator(const MemoryAllocator&)=delete;
         MemoryAllocator& operator=(const MemoryAllocator&)=delete;
         static MemoryAllocator& get_instance();
+
+        void showTree();
+        void show(RedBlackNode<ScopeMemory>* node);
 };
 
 #endif
