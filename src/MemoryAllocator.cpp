@@ -19,13 +19,33 @@ MemoryAllocator::MemoryAllocator()
         // scopeList[i][1] = (i + 1) * scopeInterval;
         lowerBound = i * scopeInterval + 1;
         upperBound = (i + 1) * scopeInterval;
-        this -> scopeTree -> insert(ScopeMemory(lowerBound, upperBound));
+        this -> scopeTree -> insert(ScopeMemory(lowerBound, upperBound, this));
     }
 
     this -> scopeTree -> preOrder();
     std::cout << std::endl;
     this -> initMemoryToTree();
     this -> showTree();
+}
+
+MetaMemory* MemoryAllocator::allocate(size_t memorySize)
+{
+    RedBlackNode<ScopeMemory>* findedNode = this -> scopeTree -> search(ScopeMemory(memorySize, memorySize));
+    if (findedNode)
+    {
+        ScopeMemory scopeMemory = findedNode -> key;
+        return scopeMemory.allocate(memorySize);
+    }
+    else
+    {
+        size_t insertScopeMemoryUpperBound = (size_t(memorySize / this -> scopeInterval) + 1) * this -> scopeInterval;
+        size_t insertScopeMemoryLowerBound = (size_t(memorySize / this -> scopeInterval)) * this -> scopeInterval;
+        this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound, this));
+        findedNode = this -> scopeTree -> search(ScopeMemory(memorySize, memorySize));
+        // findedNode -> key.insertMemory(&metaMemory);
+        ScopeMemory ScopeMemory = findedNode -> key;
+        return ScopeMemory.allocate(memorySize);
+    }
 }
 
 void MemoryAllocator::show(RedBlackNode<ScopeMemory>* node)
@@ -67,7 +87,7 @@ void MemoryAllocator::insertMemory(MetaMemory metaMemory)
         size_t insertMemorySize = metaMemory.getMemorySize();
         size_t insertScopeMemoryUpperBound = (size_t(insertMemorySize / this -> scopeInterval) + 1) * this -> scopeInterval;  
         size_t insertScopeMemoryLowerBound = (size_t(insertMemorySize / this -> scopeInterval)) * this -> scopeInterval;
-        this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound));
+        this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound, this));
         findedNode = this -> scopeTree -> search(scopeMemory);
         findedNode -> key.insertMemory(&metaMemory);
     }

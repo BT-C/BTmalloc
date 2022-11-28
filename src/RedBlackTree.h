@@ -488,9 +488,7 @@ class RedBlackTree
         {
             preOrder(treeRoot);
         }
-        /*
-        * 中序遍历"红黑树"
-        */
+        
         void inOrder(RedBlackNode<T>* tree) 
         {
             if(tree != NULL)
@@ -506,9 +504,6 @@ class RedBlackTree
             inOrder(treeRoot);
         }
 
-        /*
-        * 后序遍历"红黑树"
-        */
         void postOrder(RedBlackNode<T>* tree) 
         {
             if(tree != NULL)

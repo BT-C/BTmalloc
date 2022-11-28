@@ -33,12 +33,15 @@ class ScopeMemory
         size_t upperBound;
         size_t treeListLength;
         RedBlackTree<MetaMemory>* treeList;
+        MemoryAllocator* memoryAllocator;
 
         ScopeMemory();
         ScopeMemory(size_t lowerBound, size_t upperBound);
+        ScopeMemory(size_t lowerBound, size_t upperBound, MemoryAllocator* memoryAllocator);
         ~ScopeMemory();
 
         void insertMemory(MetaMemory* node);
+        void* allocate(size_t memorySize);
 
         // void modifyBound();
         void showTree();

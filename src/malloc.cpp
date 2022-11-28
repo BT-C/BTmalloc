@@ -143,12 +143,12 @@ void *MyMalloc()
 
 int main()
 {
-    size_t length = 4;
-    int *arr = (int *)mmap(NULL, length, PROT_READ|PROT_WRITE, MAP_ANON | MAP_SHARED, 0, 0);
-    for (size_t i = 0; i < 100; i ++)
-        std::cout << arr[i] << std::endl;
-    munmap(arr, length);
-    // void* address = MyMalloc();
+    // size_t length = 4;
+    // int *arr = (int *)mmap(NULL, length, PROT_READ|PROT_WRITE, MAP_ANON | MAP_SHARED, 0, 0);
+    // for (size_t i = 0; i < 100; i ++)
+    //     std::cout << arr[i] << std::endl;
+    // munmap(arr, length);
+    void* address = MyMalloc();
     // std::cout << sizeof(address) << std::endl;
 
 }

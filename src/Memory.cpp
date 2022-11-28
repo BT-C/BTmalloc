@@ -1,4 +1,5 @@
 #include "Memory.h"
+#include "MemoryAllocator.h"
 
 #include<iostream>
 #include<cstdlib>
@@ -67,6 +68,7 @@ ScopeMemory::ScopeMemory()
     this -> lowerBound = 0;
     this -> upperBound = 0;
     this -> treeListLength = 10;
+    this -> memoryAllocator = NULL;
     this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
 }
 
@@ -75,6 +77,16 @@ ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound)
     this -> lowerBound = lowerBound;
     this -> upperBound = upperBound;
     this -> treeListLength = 10;
+    this -> memoryAllocator = NULL;
+    this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
+}
+
+ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound, MemoryAllocator* memoryAllocator)
+{
+    this -> lowerBound = lowerBound;
+    this -> upperBound = upperBound;
+    this -> treeListLength = 10;
+    this -> memoryAllocator = memoryAllocator;
     this -> treeList = new RedBlackTree<MetaMemory>[this -> treeListLength];
 }
 
@@ -84,6 +96,33 @@ void ScopeMemory::insertMemory(MetaMemory* node)
     size_t index = rand() % (this -> treeListLength);
     // std::cout << "index :" << index << std::endl;
     this -> treeList[index].insert((*node));
+}
+
+void* ScopeMemory::allocate(size_t memorySize)
+{
+    size_t index = rand() % (this -> treeListLength);
+    RedBlackNode<MetaMemory>* result = this -> treeList[index].search(MetaMemory(memorySize, 0));
+    if (result)
+    {
+        void *address = (void *)(result -> key.getAddress());
+        treeList[index].remove(MetaMemory(memorySize, 0));
+        return address;
+    }
+    else
+    {
+        for (size_t i = 0; i < 5; i ++)
+        {
+            // this -> memoryAllocator
+            size_t memorySize = memorySize;
+            size_t address = 0;
+            this -> treeList[index].insert(MetaMemory(memorySize, address));
+        }
+        // this -> memoryAllocator
+        size_t memorySize = memorySize;
+        size_t address = 0;
+        MetaMemory *memory = new MetaMemory(memorySize, address);
+        return memory;
+    }
 }
 
 ScopeMemory::~ScopeMemory()

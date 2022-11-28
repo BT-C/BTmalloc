@@ -21,6 +21,7 @@ class MemoryAllocator
         MemoryAllocator& operator=(const MemoryAllocator&)=delete;
         static MemoryAllocator& get_instance();
 
+        void* allocate(size_t memorySize);
         void showTree();
         void show(RedBlackNode<ScopeMemory>* node);
 };
