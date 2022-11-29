@@ -8,8 +8,10 @@ MemoryAllocator::MemoryAllocator()
 {
     std::cout << "create memory allocator" << std::endl;
     this -> scopeTree = new RedBlackTree<ScopeMemory>();
+    size_t scopeLowerBound = 0, scopeUpperBound = 1024 * 1024 * 1024;
     size_t row = 4, col = 2;
     size_t scopeInterval = 1024 * 1024;
+    row = (scopeUpperBound - scopeLowerBound) / scopeInterval;
     this -> scopeInterval = scopeInterval;
     size_t lowerBound = 0, upperBound = 0;
 
@@ -39,13 +41,15 @@ void* MemoryAllocator::allocate(size_t memorySize)
     }
     else
     {
-        size_t insertScopeMemoryUpperBound = (size_t(memorySize / this -> scopeInterval) + 1) * this -> scopeInterval;
-        size_t insertScopeMemoryLowerBound = (size_t(memorySize / this -> scopeInterval)) * this -> scopeInterval;
-        this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound));
-        findedNode = this -> scopeTree -> search(ScopeMemory(memorySize, memorySize));
-        // findedNode -> key.insertMemory(&metaMemory);
-        ScopeMemory ScopeMemory = findedNode -> key;
-        return ScopeMemory.allocate(memorySize);
+        // size_t insertScopeMemoryUpperBound = (size_t(memorySize / this -> scopeInterval) + 1) * this -> scopeInterval;
+        // size_t insertScopeMemoryLowerBound = (size_t(memorySize / this -> scopeInterval)) * this -> scopeInterval;
+        // this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound));
+        // findedNode = this -> scopeTree -> search(ScopeMemory(memorySize, memorySize));
+        // // findedNode -> key.insertMemory(&metaMemory);
+        // ScopeMemory ScopeMemory = findedNode -> key;
+        // return ScopeMemory.allocate(memorySize);
+        std::cout << "allocate too large" << std::endl;
+        return (void *)NULL;
     }
 }
 
@@ -85,12 +89,13 @@ void MemoryAllocator::insertMemory(MetaMemory metaMemory)
     {
         // ScopeMemory maxScopeMemory = this -> scopeTree -> maximum();
         // size_t maxScopeMemoryUpperBound = maxScopeMemory.upperBound;
-        size_t insertMemorySize = metaMemory.getMemorySize();
-        size_t insertScopeMemoryUpperBound = (size_t(insertMemorySize / this -> scopeInterval) + 1) * this -> scopeInterval;  
-        size_t insertScopeMemoryLowerBound = (size_t(insertMemorySize / this -> scopeInterval)) * this -> scopeInterval;
-        this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound));
-        findedNode = this -> scopeTree -> search(scopeMemory);
-        findedNode -> key.insertMemory(&metaMemory);
+        // size_t insertMemorySize = metaMemory.getMemorySize();
+        // size_t insertScopeMemoryUpperBound = (size_t(insertMemorySize / this -> scopeInterval) + 1) * this -> scopeInterval;  
+        // size_t insertScopeMemoryLowerBound = (size_t(insertMemorySize / this -> scopeInterval)) * this -> scopeInterval;
+        // this -> scopeTree -> insert(ScopeMemory(insertScopeMemoryLowerBound + 1, insertScopeMemoryUpperBound));
+        // findedNode = this -> scopeTree -> search(scopeMemory);
+        // findedNode -> key.insertMemory(&metaMemory);
+        return ;
     }
 }
 
