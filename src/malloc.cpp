@@ -7,6 +7,7 @@
 #include<sys/mman.h>
 #include<pthread.h>
 #include<time.h>
+#include<random>
 
 #include "Memory.h"
 #include "MemoryAllocator.h"
@@ -140,7 +141,7 @@ void *MyMalloc(size_t size)
     srand(time(NULL));
     MemoryAllocator& mallocator = MemoryAllocator::get_instance();
 
-    mallocator.showTree();
+    // mallocator.showTree();
     // std::cout << "allocate size " << size << std::endl;
     if (size % 8 != 0)
         size = (size / 8 + 1) * 8;
@@ -152,7 +153,6 @@ void *MyMalloc(size_t size)
 void MyFree(void* address)
 {
     size_t* allocateAddress = (size_t *)address;
-    // std::cout << allocateAddress << " ^ " << std::endl;
     size_t allocateSize = *(allocateAddress - 1);
     MemoryAllocator& mallocator = MemoryAllocator::get_instance();
     // std::cout << allocateAddress << " " << allocateSize << std::endl;
@@ -164,7 +164,9 @@ void TestMalloc()
     for (size_t i = 1; i < 4; i ++)
     {
         // void* address = MyMalloc(sizeof(int) * 100);
-        void* address = MyMalloc(i);
+        std::cout << "Test " << i << " : ------------------" << std::endl;
+        void* address = MyMalloc(3);
+        std::cout << "allocate address : " << (size_t *)address << std::endl;
         MyFree(address);
     }
 }
@@ -180,15 +182,16 @@ void* addOne(void* args)
 void* ThreadMalloc(void *args)
 {
     size_t size = rand() % 1024;
-    void* address = MyMalloc(3);
-    std::cout << "allocate address : " << (size_t *)address << std::endl;
+    void* address = MyMalloc(size);
+    // std::cout << rand() % 100 << std::endl;
+    // std::cout << "allocate address : " << (size_t *)address << std::endl;
     MyFree(address);
     return 0;
 }
 
 void TestMultiThread()
 {
-    size_t numThreads = 3;
+    size_t numThreads = 30000;
     pthread_t tids[numThreads];
     for (size_t i = 0; i < numThreads; i ++)
     {
@@ -218,7 +221,16 @@ int main()
     //     std::cout << arr[i] << std::endl;
     // munmap(arr, length);
     // MemoryAllocator& mallocator = MemoryAllocator::get_instance();
-    TestMalloc();
+    // TestMalloc();
+
+    TestMultiThreadTime();
+    
+    // for (size_t i = 0; i < 10; i ++)
+    // {
+    //     clock_t t = clock();
+    //     // std::cout << rand() % 100 << std::endl;
+        
+    // }
     
     
     // void *addr = mmap(NULL, 100, PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);

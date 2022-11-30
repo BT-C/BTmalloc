@@ -5,6 +5,7 @@
 #include<cstdlib>
 #include<ctime>
 #include<mutex>
+#include<random>
 
 
 MetaMemory::MetaMemory(){
@@ -97,6 +98,8 @@ void ScopeMemory::insertMemory(MetaMemory* node)
 {
     // srand((int)time(0));
     size_t index = rand() % (this -> treeListLength);
+    std::random_device e;
+    index = e() % (this -> treeListLength);
     // std::cout << "index :" << index << std::endl;
     this -> mutexList[index].lock();
     this -> treeList[index].insert((*node));
@@ -106,6 +109,10 @@ void ScopeMemory::insertMemory(MetaMemory* node)
 void* ScopeMemory::allocate(size_t memorySize)
 {
     size_t index = rand() % (this -> treeListLength);
+    
+    std::random_device e;
+    index = e() % (this -> treeListLength);
+    // std::cout << index << std::endl;
     this -> mutexList[index].lock();
 
     RedBlackNode<MetaMemory>* result = this -> treeList[index].search(MetaMemory(memorySize, 0));

@@ -8,9 +8,11 @@ MemoryAllocator::MemoryAllocator()
 {
     std::cout << "create memory allocator" << std::endl;
     this -> scopeTree = new RedBlackTree<ScopeMemory>();
-    size_t scopeLowerBound = 0, scopeUpperBound = 1024 * 1024 * 1024;
+    // size_t scopeLowerBound = 0, scopeUpperBound = 1024 * 1024 * 1024;
+    size_t scopeLowerBound = 0, scopeUpperBound = 1024;
     size_t row = 4, col = 2;
-    size_t scopeInterval = 1024 * 1024 * 512;
+    // size_t scopeInterval = 1024 * 1024 * 512;
+    size_t scopeInterval = 512;
     allocateMmapMutex = new std::mutex();
     row = (scopeUpperBound - scopeLowerBound) / scopeInterval;
     this -> scopeInterval = scopeInterval;
@@ -85,12 +87,12 @@ void MemoryAllocator::showTree()
 
 void MemoryAllocator::initMemoryToTree()
 {
-    size_t memNum = 5;
+    size_t memNum = 100;
     for (size_t i = 1; i < memNum; i ++)
     {
         // this -> insertMemory(MetaMemory(i * 16 * 1024, i));
         size_t allocateSize = i * 8;
-        for (size_t j = 1; j < 2; j ++)
+        for (size_t j = 1; j < 100; j ++)
         {
             size_t tempAddress = this -> allocateNewMemoryToTree(allocateSize);
             this -> insertMemory(MetaMemory(allocateSize, tempAddress));
