@@ -11,6 +11,7 @@ MemoryAllocator::MemoryAllocator()
     size_t scopeLowerBound = 0, scopeUpperBound = 1024 * 1024 * 1024;
     size_t row = 4, col = 2;
     size_t scopeInterval = 1024 * 1024 * 512;
+    allocateMmapMutex = new std::mutex();
     row = (scopeUpperBound - scopeLowerBound) / scopeInterval;
     this -> scopeInterval = scopeInterval;
     size_t lowerBound = 0, upperBound = 0;
@@ -145,3 +146,45 @@ MemoryAllocator::~MemoryAllocator()
     munmap((void*)this->mmapAddress, this -> mmapLength);
     std::cout << "delete MemoryAllocator" << std::endl;
 }
+
+void* MemoryAllocator::getMmapAddress()
+{
+    return this -> mmapAddress;
+}
+
+size_t MemoryAllocator::getMmapLength()
+{
+    return this -> mmapLength;
+}
+
+size_t MemoryAllocator::getScopeInterval()
+{
+    return this -> scopeInterval;
+}
+
+size_t MemoryAllocator::getLastFreeIndex()
+{
+    return this -> lastFreeIndex;
+}
+
+size_t MemoryAllocator::allocateNewMemoryToTree(RedBlackTree<MetaMemory>* metaMemoryTree, size_t allocateSize)
+{
+    allocateMmapMutex -> lock();
+
+    if (this -> lastFreeIndex + allocateSize + 1 >= this -> mmapLength)
+    {
+        std::cout << "no other mmap address to allocate" << std::endl;
+        return ;
+    }
+            
+    ((size_t *)this -> mmapAddress)[this -> lastFreeIndex] = allocateSize;
+    size_t tempAddress = (size_t)(&(((size_t *)(this -> mmapAddress))[this -> lastFreeIndex + 1]));
+    // std::cout << tempAddress << " ";
+    this -> lastFreeIndex += allocateSize + 1;
+    // this -> insertMemory(MetaMemory(allocateSize, tempAddress));
+
+    allocateMmapMutex -> unlock();
+
+    return tempAddress;
+}
+

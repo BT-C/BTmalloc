@@ -126,13 +126,22 @@ void* ScopeMemory::allocate(size_t memorySize)
     }
     else
     {
+        MemoryAllocator& memoryAllocator = MemoryAllocator::get_instance();
+        void* mmapAddress = memoryAllocator.getMmapAddress();
+        size_t mmapLength = memoryAllocator.getMmapLength();
+        size_t lastFreeIndex = memoryAllocator.getLastFreeIndex();
+
         for (size_t i = 0; i < 5; i ++)
         {
             // this -> memoryAllocator
             std::cout << "memorySize" << memorySize << std::endl;
             // size_t memorySize = memorySize;
-            size_t address = 0;
-            this -> treeList[index].insert(MetaMemory(memorySize, address));
+            size_t allocateSize = memorySize;
+            ((size_t *)mmapAddress)[lastFreeIndex] = allocateSize;
+            size_t tempAddress = (size_t)(&(((size_t *)(mmapAddress))[lastFreeIndex + 1]));
+            memoryAllocator.
+            
+            this -> treeList[index].insert(MetaMemory(allocateSize, tempAddress));
         }
         // this -> memoryAllocator
         size_t memorySize = memorySize;
@@ -140,7 +149,6 @@ void* ScopeMemory::allocate(size_t memorySize)
         // MetaMemory *memory = new MetaMemory(memorySize, address);
         // return memory;
         this -> mutexList[index].unlock();
-        std::cout << MemoryAllocator::get_instance().mmapLength << std::endl;
         std::cout << "*****" << (size_t)address << std::endl;
         return (void *)address;
     }
