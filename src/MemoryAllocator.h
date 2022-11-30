@@ -35,7 +35,8 @@ class MemoryAllocator
         // void addLastFreeIndex(size_t addIndex);
 
         void* allocate(size_t memorySize);
-        size_t allocateNewMemoryToTree(RedBlackTree<MetaMemory>* metaMemoryTree, size_t allocateSize);
+        void allocateMemoryBack(size_t allocateSize, size_t* allocateAddress);
+        size_t allocateNewMemoryToTree(size_t allocateSize);
         void showTree();
         void show(RedBlackNode<ScopeMemory>* node);
 };

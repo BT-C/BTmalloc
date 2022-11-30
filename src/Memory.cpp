@@ -79,7 +79,7 @@ ScopeMemory::ScopeMemory(size_t lowerBound, size_t upperBound)
 {
     this -> lowerBound = lowerBound;
     this -> upperBound = upperBound;
-    this -> treeListLength = 1;
+    this -> treeListLength = 1000;
     // this -> memoryAllocator = NULL;
     // MemoryAllocator& mallocator = MemoryAllocator::get_instance();
     this -> mutexList = new std::mutex[this -> treeListLength];
@@ -108,7 +108,7 @@ void ScopeMemory::insertMemory(MetaMemory* node)
 void* ScopeMemory::allocate(size_t memorySize)
 {
     size_t index = rand() % (this -> treeListLength);
-    std::cout << "allocate " << index << std::endl;
+    // std::cout << "allocate " << index << std::endl;
     // std::cout << this << std::endl;
     this -> mutexList[index].lock();
 
@@ -119,7 +119,7 @@ void* ScopeMemory::allocate(size_t memorySize)
         void *address = (void *)(result -> key.getAddress());
         treeList[index].remove(MetaMemory(memorySize, 0));
         
-        std::cout << "success allocate" << (size_t)address << std::endl;
+        // std::cout << "success allocate" << (size_t)address << std::endl;
         // this -> treeList[index].preOrder();
         this -> mutexList[index].unlock();
         return address;
@@ -134,23 +134,22 @@ void* ScopeMemory::allocate(size_t memorySize)
         for (size_t i = 0; i < 5; i ++)
         {
             // this -> memoryAllocator
-            std::cout << "memorySize" << memorySize << std::endl;
+            // std::cout << "memorySize" << memorySize << std::endl;
             // size_t memorySize = memorySize;
             size_t allocateSize = memorySize;
-            ((size_t *)mmapAddress)[lastFreeIndex] = allocateSize;
-            size_t tempAddress = (size_t)(&(((size_t *)(mmapAddress))[lastFreeIndex + 1]));
-            memoryAllocator.
-            
+            // ((size_t *)mmapAddress)[lastFreeIndex] = allocateSize;
+            // size_t tempAddress = (size_t)(&(((size_t *)(mmapAddress))[lastFreeIndex + 1]));
+            size_t tempAddress = memoryAllocator.allocateNewMemoryToTree(allocateSize);
             this -> treeList[index].insert(MetaMemory(allocateSize, tempAddress));
         }
         // this -> memoryAllocator
-        size_t memorySize = memorySize;
-        size_t address = 0;
+        size_t allocateSize = memorySize;
+        size_t tempAddress = memoryAllocator.allocateNewMemoryToTree(allocateSize);
         // MetaMemory *memory = new MetaMemory(memorySize, address);
         // return memory;
         this -> mutexList[index].unlock();
-        std::cout << "*****" << (size_t)address << std::endl;
-        return (void *)address;
+        // std::cout << "*****" << (size_t)tempAddress << std::endl;
+        return (void *)tempAddress;
     }
 }
 

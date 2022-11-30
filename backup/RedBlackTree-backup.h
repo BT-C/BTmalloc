@@ -11,7 +11,6 @@ class RedBlackNode
         RedBlackNode *leftChild;
         RedBlackNode *rightChild;
         RedBlackNode *parent;
-
         RedBlackNode(T value, RedBlackColor color, RedBlackNode* parent, RedBlackNode* left, RedBlackNode* right);
 };
 
@@ -20,30 +19,18 @@ class RedBlackTree
 {
     private:
         RedBlackNode<T> *treeRoot;
-
         void preOrder(RedBlackNode<T>* tree);
         void inOrder(RedBlackNode<T>* tree);
         void postOrder(RedBlackNode<T>* tree);
         void print(RedBlackNode<T>* tree, T key, int direction);
-
     public:
         RedBlackTree();
         ~RedBlackTree();
-
         RedBlackNode<T> *search(T key);
-        
         void destroy();
         void destroy(RedBlackNode<T>* &tree);
-        
-
-        void print();
-        
-        
         void preOrder();
-        void inOrder();
-        void postOrder();
         
-
         RedBlackNode<T>* minimum(RedBlackNode<T>* tree);
         RedBlackNode<T>* maximum(RedBlackNode<T>* tree);
         T maximum();
