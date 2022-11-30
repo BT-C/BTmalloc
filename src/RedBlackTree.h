@@ -2,6 +2,7 @@
 #define REDBLACKTREE
 
 #include <iomanip>
+
 enum RedBlackColor{RED, BLACK};
 
 template<class T>
@@ -241,8 +242,6 @@ class RedBlackTree
 
             if ((node -> leftChild != NULL) && (node -> rightChild != NULL))
             {
-                // std::cout << "#######" << std::endl;
-                // std::cout << node -> parent << std::endl;
                 RedBlackNode<T>* replace = node;
                 replace = replace -> rightChild;
                 while (replace -> leftChild)
@@ -257,7 +256,6 @@ class RedBlackTree
                 }
                 else
                     root = replace;
-
                 child = replace -> rightChild;
                 parent = replace -> parent;
                 color = replace -> color;
@@ -274,19 +272,11 @@ class RedBlackTree
                     node -> rightChild -> parent = replace;
                 }
 
-                // std::cout << "replace : " << replace -> key << std::endl;
                 replace -> parent = node -> parent;
                 replace -> color = node -> color;
                 replace -> leftChild = node -> leftChild;
                 node -> leftChild -> parent = replace;
-                // std::cout << node -> leftChild -> key << std::endl;
-
-                // std::cout << "====" << std::endl;
-                // preOrder();
-                // std::cout << "====" << std::endl;
-                // std::cout << root -> key << std::endl;
-                // std::cout << child << std::endl;
-                // std::cout << parent -> key << std::endl;
+                
                 if (color == BLACK)
                     removeReBalance(root, child, parent);
                 delete node;
@@ -296,10 +286,6 @@ class RedBlackTree
                 return ;
             }
 
-
-            // std::cout << (node -> leftChild) << std::endl;
-            // std::cout << (node -> rightChild) << std::endl;
-            
             child = NULL;
             if (node -> leftChild != NULL)
                 child = node -> leftChild;
@@ -308,25 +294,10 @@ class RedBlackTree
             
             parent = node -> parent;
             // std::cout << node -> key << std::endl;
-            // std::cout << " &&&& " << std::endl;
-            // std::cout << treeRoot -> key << std::endl;
-            // std::cout << treeRoot -> leftChild -> key << std::endl;
-            // std::cout << treeRoot -> rightChild -> key << std::endl;
-            // std::cout << treeRoot -> leftChild -> parent -> key << std::endl;
-            // std::cout << treeRoot -> rightChild -> parent -> key << std::endl;
-            // std::cout << parent -> key << std::endl;
-            // std::cout << parent -> leftChild -> key << std::endl;
-            // std::cout << parent -> rightChild -> key<< std::endl;
             color = node -> color;
-
             if (child)
                 child -> parent = parent;
             
-
-            // std::cout << parent -> leftChild << std::endl;
-            // std::cout << parent -> rightChild << std::endl;
-            // std::cout << child << std::endl;
-
             // std::cout << "+++" << std::endl;
             if (parent)
             {
@@ -341,22 +312,7 @@ class RedBlackTree
             }
             else    
                 root = child;
-            // std::cout << "+++" << std::endl;
-            // std::cout << parent -> key << std::endl;
             
-
-            // parent -> leftChild = NULL;
-            // parent -> rightChild = NULL;
-            // std::cout << parent -> leftChild << std::endl;
-            // std::cout << parent -> rightChild << std::endl;
-            // std::cout << child << std::endl;
-
-            
-            // std::cout << "====" << std::endl;
-            // preOrder();
-            // std::cout << "====" << std::endl;
-            // std::cout << root -> key << std::endl;
-            // std::cout << child -> key << std::endl;
             // std::cout << parent -> key << std::endl;
             if (color == BLACK)
                 removeReBalance(root, child, parent);

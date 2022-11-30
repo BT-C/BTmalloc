@@ -19,8 +19,6 @@ MemoryAllocator::MemoryAllocator()
     // int scopeList[row][col];
     for (int i = 0; i < row; i ++)
     {
-        // scopeList[i][0] = i * scopeInterval;
-        // scopeList[i][1] = (i + 1) * scopeInterval;
         lowerBound = i * scopeInterval + 1;
         upperBound = (i + 1) * scopeInterval;
         this -> scopeTree -> insert(ScopeMemory(lowerBound, upperBound));
@@ -33,9 +31,6 @@ MemoryAllocator::MemoryAllocator()
     this -> mmapLength = mmapSize;
     this -> lastFreeIndex = 0;
 
-
-    // this -> scopeTree -> preOrder();
-    // std::cout << std::endl;
     this -> initMemoryToTree();
     // this -> showTree();
     std::cout << "finish init allocator" << std::endl;
@@ -90,24 +85,13 @@ void MemoryAllocator::showTree()
 
 void MemoryAllocator::initMemoryToTree()
 {
-    size_t memNum = 2;
+    size_t memNum = 5;
     for (size_t i = 1; i < memNum; i ++)
     {
         // this -> insertMemory(MetaMemory(i * 16 * 1024, i));
         size_t allocateSize = i * 8;
-        for (size_t j = 1; j < 100000; j ++)
+        for (size_t j = 1; j < 2; j ++)
         {
-            // if (this -> lastFreeIndex + allocateSize + 1 >= this -> mmapLength)
-            // {
-            //     std::cout << "no other mmap address to allocate" << std::endl;
-            //     return ;
-            // }
-            
-            // ((size_t *)this -> mmapAddress)[this -> lastFreeIndex] = allocateSize;
-            // size_t tempAddress = (size_t)(&(((size_t *)(this -> mmapAddress))[this -> lastFreeIndex + 1]));
-            // // std::cout << tempAddress << " ";
-            // this -> lastFreeIndex += allocateSize + 1;
-            // this -> insertMemory(MetaMemory(allocateSize, tempAddress));
             size_t tempAddress = this -> allocateNewMemoryToTree(allocateSize);
             this -> insertMemory(MetaMemory(allocateSize, tempAddress));
         }
