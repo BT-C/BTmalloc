@@ -1,7 +1,7 @@
 #include "MemoryAllocator.h"
 
 #include<iostream>
-
+#include<sys/mman.h>
 
 
 MemoryAllocator::MemoryAllocator()
@@ -10,7 +10,7 @@ MemoryAllocator::MemoryAllocator()
     this -> scopeTree = new RedBlackTree<ScopeMemory>();
     size_t scopeLowerBound = 0, scopeUpperBound = 1024 * 1024 * 1024;
     size_t row = 4, col = 2;
-    size_t scopeInterval = 1024 * 1024;
+    size_t scopeInterval = 1024 * 1024 * 512;
     row = (scopeUpperBound - scopeLowerBound) / scopeInterval;
     this -> scopeInterval = scopeInterval;
     size_t lowerBound = 0, upperBound = 0;
@@ -25,19 +25,33 @@ MemoryAllocator::MemoryAllocator()
         this -> scopeTree -> insert(ScopeMemory(lowerBound, upperBound));
     }
 
-    this -> scopeTree -> preOrder();
-    std::cout << std::endl;
+    size_t mmapSize = 1024 * 1024 * 64 * 8;
+    void *addr = mmap(NULL, mmapSize, PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    this -> mmapAddress = addr;
+    
+    this -> mmapLength = mmapSize;
+    this -> lastFreeIndex = 0;
+
+
+    // this -> scopeTree -> preOrder();
+    // std::cout << std::endl;
     this -> initMemoryToTree();
-    this -> showTree();
+    // this -> showTree();
+    std::cout << "finish init allocator" << std::endl;
 }
 
 void* MemoryAllocator::allocate(size_t memorySize)
 {
+    memorySize = ((memorySize / 8) + 1) * 8;
     RedBlackNode<ScopeMemory>* findedNode = this -> scopeTree -> search(ScopeMemory(memorySize, memorySize));
     if (findedNode)
     {
-        ScopeMemory scopeMemory = findedNode -> key;
-        return scopeMemory.allocate(memorySize);
+        ScopeMemory* scopeMemory = &(findedNode -> key);
+        std::cout << (*scopeMemory) << std::endl;
+        // scopeMemory -> showTree();
+        void* result = scopeMemory -> allocate(memorySize);
+        // scopeMemory -> showTree();
+        return result;
     }
     else
     {
@@ -70,10 +84,25 @@ void MemoryAllocator::showTree()
 
 void MemoryAllocator::initMemoryToTree()
 {
-    size_t memNum = 400;
+    size_t memNum = 10;
     for (size_t i = 1; i < memNum; i ++)
     {
-        this -> insertMemory(MetaMemory(i * 16 * 1024, i));
+        // this -> insertMemory(MetaMemory(i * 16 * 1024, i));
+        size_t allocateSize = i * 8;
+        for (size_t j = 1; j < 3; j ++)
+        {
+            if (this -> lastFreeIndex + allocateSize + 1 >= this -> mmapLength)
+            {
+                std::cout << "no other mmap address to allocate" << std::endl;
+                return ;
+            }
+            
+            ((size_t *)this -> mmapAddress)[this -> lastFreeIndex] = allocateSize;
+            size_t tempAddress = (size_t)(&(((size_t *)(this -> mmapAddress))[this -> lastFreeIndex + 1]));
+            // std::cout << tempAddress << " ";
+            this -> lastFreeIndex += allocateSize + 1;
+            this -> insertMemory(MetaMemory(allocateSize, tempAddress));
+        }
     }
 }
 
@@ -105,8 +134,14 @@ MemoryAllocator& MemoryAllocator::get_instance()
     return instance;
 }
 
+RedBlackTree<ScopeMemory>* MemoryAllocator::getScopeTree()
+{
+    return this -> scopeTree;
+}
+
 MemoryAllocator::~MemoryAllocator()
 {
     scopeTree -> destroy();
+    munmap((void*)this->mmapAddress, this -> mmapLength);
     std::cout << "delete MemoryAllocator" << std::endl;
 }

@@ -66,7 +66,6 @@ void TestRedBlack()
     std::cout << "== 树的详细信息: " << std::endl;
     tree->print();
 
-    // 设置check_remove=1,测试"删除函数"
     if(check_remove)
     {
         for(i=0; i<ilen; i++)
@@ -80,7 +79,6 @@ void TestRedBlack()
         }
     }
 
-    // 销毁红黑树
     tree -> destroy();
 
 }
@@ -135,9 +133,18 @@ void TestRedBlackAllocate()
     // return 1;
 }
 
-void *MyMalloc()
+void *MyMalloc(size_t size)
 {
+    srand(time(NULL));
     MemoryAllocator& mallocator = MemoryAllocator::get_instance();
+
+    for (size_t i = 0; i < 1; i ++)
+    {
+        mallocator.showTree();
+        std::cout << "allocate size " << size << std::endl;
+        mallocator.allocate(size);
+    }
+
     return (void *)1;
 }
 
@@ -148,7 +155,15 @@ int main()
     // for (size_t i = 0; i < 100; i ++)
     //     std::cout << arr[i] << std::endl;
     // munmap(arr, length);
-    void* address = MyMalloc();
-    // std::cout << sizeof(address) << std::endl;
+    for (size_t i = 1; i < 10; i ++)
+        // void* address = MyMalloc(sizeof(int) * 100);
+        void* address = MyMalloc(7);
+    
+    // void *addr = mmap(NULL, 100, PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
+    // std::cout << &(((size_t *)addr)[0]) << std::endl;
+    // std::cout << &(((size_t *)addr)[1]) << std::endl;
+    // size_t address = (size_t)(&(((size_t *)addr)[1]));
+    // std::cout << (size_t *)address  << std::endl;
+    // std::cout << (size_t *)address << std::endl;
 }

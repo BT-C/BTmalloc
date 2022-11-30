@@ -6,6 +6,7 @@
 #include <mutex>
 
 #include "RedBlackTree.h"
+// #include "MemoryAllocator.h"
 
 class MetaMemory
 {
@@ -35,6 +36,7 @@ class ScopeMemory
         size_t treeListLength;
         std::mutex *mutexList;
         RedBlackTree<MetaMemory>* treeList;
+        // MemoryAllocator& mallocator = MemoryAllocator::get_instance();
         
         // MemoryAllocator* memoryAllocator;
 

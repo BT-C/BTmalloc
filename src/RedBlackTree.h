@@ -42,6 +42,8 @@ class RedBlackTree
                 
         RedBlackNode<T>* search(RedBlackNode<T>* x, T key) 
         {
+            // if (x && key.memorySize == 400)
+            //     std::cout << x -> key -> memorySize << std::endl;
             if (x==NULL || x->key==key)
                 return x;
         
@@ -539,11 +541,6 @@ class RedBlackTree
             return tree;
         }
 
-
-
-        /*
-        * 查找最大结点：返回tree为根结点的红黑树的最大结点。
-        */
         RedBlackNode<T>* maximum(RedBlackNode<T>* tree)
         {
             if (tree == NULL)
